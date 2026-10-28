@@ -1,14 +1,23 @@
 import { useState } from 'react'
 import { Heart, ShoppingBag } from 'lucide-react'
 
-export default function Card() {
+// 1. Contract: Define the props Card expects
+export interface CardProps {
+    title: string
+    description: string
+    image: string
+    category: string
+    price?: number
+}
+
+export default function Card({ title, description, image, category, price = 89.00 }: CardProps) {
     const [qty, setQty] = useState(1)
     const [isFavorite, setIsFavorite] = useState(false)
 
     return (
         <div className="group bg-white border border-[#E5E7EB] rounded-3xl p-5 flex flex-col relative transition-all duration-200 hover:shadow-xl">
 
-            {/* 1. Favorite Heart Button */}
+            {/* Favorite Heart Button */}
             <button
                 type="button"
                 onClick={() => setIsFavorite(!isFavorite)}
@@ -21,29 +30,40 @@ export default function Card() {
                 />
             </button>
 
-            {/* 2. Image Area */}
-            <div className="h-50 w-full bg-[#FAFAFA] rounded-2xl overflow-hidden flex items-center justify-center mb-5">
+            {/* Product Image */}
+            <div className="h-50 w-full bg-[#FAFAFA] rounded-2xl overflow-hidden flex items-center justify-center mb-4">
                 <img
-                    src="https://placehold.co/400x300/E5E7EB/A68A64?text=Product+Item"
-                    alt="Product item"
+                    src={image}
+                    alt={title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
             </div>
 
-            {/* 3. Product Info */}
+            {/* Product Info */}
             <div className="flex flex-col flex-1 justify-between">
-                <h3 className="text-lg font-semibold text-[#111827] mb-4">
-                    Premium Ceramic Lamp
-                </h3>
+                <div>
+                    {/* Category Pill / Tag */}
+                    <span className="text-[11px] font-semibold tracking-wider uppercase text-[#A68A64] bg-[#F5F1EB] px-2.5 py-1 rounded-full inline-block mb-2">
+            {category}
+          </span>
 
-                {/* Bottom Row: Price + Quantity + Add Button */}
-                <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#E5E7EB]">
-                    {/* Price */}
+                    {/* Dynamic Title */}
+                    <h3 className="text-lg font-semibold text-[#111827] mb-1 line-clamp-1">
+                        {title}
+                    </h3>
+
+                    {/* Dynamic Description */}
+                    <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed mb-4">
+                        {description}
+                    </p>
+                </div>
+
+                {/* Bottom Row: Price + Quantity + Add to Cart */}
+                <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#E5E7EB]">
                     <div className="text-xl font-bold text-[#111827]">
-                        $89.00
+                        ${price.toFixed(2)}
                     </div>
 
-                    {/* Controls: Quantity Pill + Add Button */}
                     <div className="flex items-center gap-2">
                         {/* Quantity Selector */}
                         <div className="flex items-center gap-1.5 bg-[#FAFAFA] border border-[#E5E7EB] rounded-full px-2 py-1 text-sm">
@@ -66,7 +86,7 @@ export default function Card() {
                             </button>
                         </div>
 
-                        {/* Circular Add Button */}
+                        {/* Add to Cart Button */}
                         <button
                             type="button"
                             aria-label="Add to cart"
